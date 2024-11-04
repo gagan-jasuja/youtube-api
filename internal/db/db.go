@@ -15,7 +15,7 @@ func Connect(mongoURI string) (*mongo.Client, error) {
     if err != nil {
         return nil, err
     }
-    // Check the connection
+
     ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
     defer cancel()
     if err := client.Ping(ctx, nil); err != nil {

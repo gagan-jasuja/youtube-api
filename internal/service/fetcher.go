@@ -34,16 +34,9 @@ type YouTubeResponse struct {
 
 var currentQuery string
 
-// SetQuery dynamically updates the predefined query
-func SetQuery(query string) {
-    currentQuery = query
-}
-
-// StartFetcher runs an asynchronous fetcher that fetches videos for a given query periodically
 func StartFetcher(collection *mongo.Collection, cfg *config.Config) {
     ticker := time.NewTicker(10 * time.Second)
     defer ticker.Stop()
-
     for range ticker.C {
         if currentQuery != "" {
             _ , err := FetchYouTubeVideos(currentQuery, collection, cfg)
@@ -55,8 +48,6 @@ func StartFetcher(collection *mongo.Collection, cfg *config.Config) {
     }
 }
 
-
-
 func FetchYouTubeVideos(query string, collection *mongo.Collection, cfg *config.Config) ([]models.Video, error) {
     apiKey := cfg.YouTubeAPIKey
     requestURL := fmt.Sprintf(
@@ -67,37 +58,27 @@ func FetchYouTubeVideos(query string, collection *mongo.Collection, cfg *config.
     resp, err := http.Get(requestURL)
     if err != nil || resp.StatusCode != http.StatusOK {
         log.Printf("Error fetching data from YouTube API: %v", err)
-        // http.Error(w, "Failed to fetch data from YouTube API", http.StatusInternalServerError)
         return nil, err
     }
     defer resp.Body.Close()
 
     body, err := io.ReadAll(resp.Body)
     if err != nil {
-        // http.Error(w, "Failed to read response from YouTube API", http.StatusInternalServerError)
         return nil, err
     }
 
     var ytResponse YouTubeResponse
     if err := json.Unmarshal(body, &ytResponse); err != nil {
-        // http.Error(w, "Failed to parse response from YouTube API", http.StatusInternalServerError)
         return nil, err
     }
 
-    // Convert YouTube API response to internal Video structure
     results := []models.Video{}
     for _, item := range ytResponse.Items {
-        // Parse and set PublishDate explicitly to UTC
-        publishDate, err := time.Parse(time.RFC3339, item.Snippet.PublishedAt)
-        if err != nil {
-            log.Printf("Error parsing publish date for video %s: %v", item.Snippet.Title, err)
-            continue
-        }
         results = append(results, models.Video{
             ID:          item.ID.VideoID,
             Title:       item.Snippet.Title,
             Description: item.Snippet.Description,
-            PublishDate: primitive.NewDateTimeFromTime(publishDate),
+            PublishDate: primitive.NewDateTimeFromTime(time.Now()),
             ThumbnailURL:   item.Snippet.Thumbnails.Default.URL,
         })
     }
