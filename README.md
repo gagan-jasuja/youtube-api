@@ -28,7 +28,7 @@ This is a simple Go application that interacts with the YouTube API to fetch and
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/YourUsername/your-repo-name.git
+   git clone https://github.com/gagan-jasuja/youtube-api.git
    cd your-repo-name
    ```
 
@@ -82,12 +82,12 @@ GET http://localhost:8080/videos?page=1&limit=10
 
 **Search Videos:**
 ```
-GET http://localhost:8080/search?query=Anthos
+GET http://localhost:8080/search?query=Movies
 ```
 
 ### License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Primary_Owner - Gagan Jasuja
 
 ## Contributing
 
