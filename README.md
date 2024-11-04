@@ -39,6 +39,7 @@ This is a simple Go application that interacts with the YouTube API to fetch and
 
 3. Install the necessary dependencies:
    ```bash
+   go mod init youtube-api
    go mod tidy
    ```
 
