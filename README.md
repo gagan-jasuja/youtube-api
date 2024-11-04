@@ -90,10 +90,6 @@ GET http://localhost:8080/search?query=Movies
 
 Primary_Owner - Gagan Jasuja
 
-## Contributing
-
-Contributions are welcome! Please create a pull request or open an issue to discuss changes.
-
 ## Acknowledgements
 
 - [YouTube Data API](https://developers.google.com/youtube/v3)
